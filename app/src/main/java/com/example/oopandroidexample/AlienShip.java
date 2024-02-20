@@ -10,6 +10,7 @@ public abstract class AlienShip
 
     public String currentMsgOut;
 
+    ///empty constructor (constructor sig, no parameters)
     public AlienShip()
     {
 

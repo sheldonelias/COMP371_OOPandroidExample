@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Shared variables for cross-class messaging
     public static String messageString = "";
+
+    //All or most of your XML Views are also Classes
     public TextView mainView;
 
     @Override
