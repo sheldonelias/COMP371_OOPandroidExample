@@ -4,7 +4,6 @@ import android.util.Log;
 
 public class Fighter extends AlienShip
 {
-
     public Fighter()
     {
         super(400);
@@ -14,7 +13,9 @@ public class Fighter extends AlienShip
     }
    public void fireWeapon()
    {
-       Log.i("Firing weapon: ", "Lasers firing!");
-       currentMsgOut = "Firing weapon: Lasers firing!";
+       if(getShieldStrength() >0) {
+           Log.i("Fighter firing: ", "Kazzzhooom!");
+           currentMsgOut = "Fighter firing: Kazzzhooom!";
+       }
    }
 }

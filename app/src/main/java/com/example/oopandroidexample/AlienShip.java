@@ -43,12 +43,15 @@ public abstract class AlienShip
 
     public void hitDetected()
     {
-        shieldStrength -= 25;
-        Log.i("Incoming: ", "Bam!!");
-        currentMsgOut = "Incoming: Bam!!";
-        if (shieldStrength == 0)
-        {
-            destroyShip();
+        if(shieldStrength > 0) {
+
+            shieldStrength -= 50;
+            Log.i("Incoming: ", "Boom!! shieldStrength: " + shieldStrength);
+            currentMsgOut = "Incoming: Boom!! shieldStrength: " + shieldStrength;
+            if (shieldStrength == 0) {
+                destroyShip();
+            }
+
         }
     }
 

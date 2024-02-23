@@ -19,7 +19,11 @@ import com.example.oopandroidexample.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,34 +34,38 @@ public class MainActivity extends AppCompatActivity {
     public static String messageString = "";
     public TextView mainView;
 
+
+    //Instantiate fighter and bomber
+    Fighter aFighter;
+
+    Bomber aBomber;
+
+    //Save each of the clikcable alienship graphic to memory
+    ImageView alien_ship1;
+    ImageView alien_ship2;
+
+    ImageView explosion1;
+    ImageView explosion2;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //These are the only two lines always needed. Much of the
+        //other auto-generated code is a bit superfluous
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        alien_ship1 = (ImageView) findViewById(R.id.alien_ship1);
+        alien_ship2 = (ImageView) findViewById(R.id.alien_ship2);
 
-        setSupportActionBar(binding.toolbar);
+        explosion1 = (ImageView) findViewById(R.id.explosion1);
+        explosion2 = (ImageView) findViewById(R.id.explosion2);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        ImageView missle1 = (ImageView) findViewById(R.id.missle1);
+        ImageView missle2 = (ImageView) findViewById(R.id.missle2);
 
-        /*binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
-
-    }
-
-    public void onStart() {
-
-        super.onStart();
 
         //Assign to static variable mainView the TextView object that has the text of MainActivity
         mainView = (TextView) findViewById(R.id.textview_first);
@@ -78,30 +86,110 @@ public class MainActivity extends AppCompatActivity {
         Log.i("aBomber Shield: ", ""+ aBomber.getShieldStrength());
         passMessageToScreen("aBomber Shield: " + aBomber.getShieldStrength());
 
-        //Battle attacks
-        aBomber.fireWeapon();
-        passMessageToScreen(aBomber.currentMsgOut);
-        aFighter.fireWeapon();
-        passMessageToScreen(aFighter.currentMsgOut);
+        alien_ship2.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Toast.makeText(MainActivity.this,
+                        "Bomber fires! Fighter is hit.", Toast.LENGTH_SHORT).show();
 
-        //Battle hits
-        aBomber.hitDetected();
-        passMessageToScreen(aBomber.currentMsgOut);
-        aBomber.hitDetected();
-        passMessageToScreen(aBomber.currentMsgOut);
-        aBomber.hitDetected();
-        passMessageToScreen(aBomber.currentMsgOut);
-        aBomber.hitDetected();
-        passMessageToScreen(aBomber.currentMsgOut);
+                RelativeLayout.LayoutParams missle2_RelativeLayout =
+                        new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                    missle2_RelativeLayout.leftMargin = 180;
+
+                    missle2.setLayoutParams(missle2_RelativeLayout);
+
+                //Battle attacks
+                aBomber.fireWeapon();
+                passMessageToScreen(aBomber.currentMsgOut);
+
+                //Battle hits
+                aFighter.hitDetected();
+                passMessageToScreen(aFighter.currentMsgOut);
+
+                checkFighterShield();
+
+            }
+
+            public void checkFighterShield()
+            {
+                if(aFighter.getShieldStrength() <= 0)
+                {
+                    alien_ship1.setVisibility(View.INVISIBLE);
+                    explosion1.setVisibility(View.VISIBLE);
+                }
+            }
+        }); //Notice that the whole instantiation of the OnClickListener is an argument
+
+
+        alien_ship1.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Toast.makeText(MainActivity.this,
+                        "Fighter fires! Bomber is hit!", Toast.LENGTH_SHORT).show();
+
+                RelativeLayout.LayoutParams missle1_RelativeLayout =
+                        new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                missle1_RelativeLayout.rightMargin = 180;
+
+                missle1.setLayoutParams(missle1_RelativeLayout);
+
+                //Battle attacks
+                aFighter.fireWeapon();
+                passMessageToScreen(aFighter.currentMsgOut);
+
+                //Battle hits
+                aBomber.hitDetected();
+                passMessageToScreen(aBomber.currentMsgOut);
+
+                checkBomberShield();
+
+            }
+
+
+
+            public void checkBomberShield()
+            {
+                if(aBomber.getShieldStrength() <= 0)
+                {
+                    alien_ship2.setVisibility(View.INVISIBLE);
+                    explosion2.setVisibility(View.VISIBLE);
+                }
+            }
+
+        }); //Notice that the whole instantiation of the OnClickListener is an argument
+
+    }
+
+    public void onStart() {
+
+        super.onStart();
+
+    }
+
+
+
+    public void blowUpShip(ImageView alienShip)
+    {
+
     }
 
     //Messaging method
     public void passMessageToScreen(String msg)
     {
         //Concatenate static method
-        messageString += msg + "\n\n";
+        messageString += msg + "\n";
         //Change visible text on MainActivity
         mainView.setText(messageString);
+
+        //messageString = "";
     }
 
     @Override
@@ -124,12 +212,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
     }
 }

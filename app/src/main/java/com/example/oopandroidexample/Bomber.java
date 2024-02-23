@@ -2,7 +2,6 @@ package com.example.oopandroidexample;
 
 import android.util.Log;
 
-
 public class Bomber extends AlienShip
 {
     public Bomber()
@@ -15,8 +14,11 @@ public class Bomber extends AlienShip
     }
    public void fireWeapon()
    {
-       Log.i("Firing weapon: ", "Bombs away!");
-       currentMsgOut = "Firing weapon: Bombs away!";
+       if(getShieldStrength() >0)
+       {
+           Log.i("Bomber firing: ", "Ka-blam!");
+           currentMsgOut = "Bomber firing: Ka-blam!";
+       }
    }
 
 
