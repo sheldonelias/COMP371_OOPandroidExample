@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     Bomber aBomber;
 
-    //Save each of the clikcable alienship graphic to memory
+    //Save each of the clickable alienship graphic to memory
     ImageView alien_ship1;
     ImageView alien_ship2;
 
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Custom ---
         alien_ship1 = (ImageView) findViewById(R.id.alien_ship1);
         alien_ship2 = (ImageView) findViewById(R.id.alien_ship2);
 
